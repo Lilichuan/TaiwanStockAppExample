@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ExampleStockApp</string>
+    <string name="start_price">開盤價</string>
+    <string name="end_price">收盤價</string>
+    <string name="height_price">最高價</string>
+    <string name="low_price">最低價</string>
+    <string name="textA">漲跌價差</string>
+    <string name="average_month_price">月平均價</string>
+    <string name="deal_count">成交筆數</string>
+    <string name="deal_abc">成交股數</string>
+    <string name="deal_money">成交金額</string>
 </resources>
