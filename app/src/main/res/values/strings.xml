@@ -9,4 +9,6 @@
     <string name="deal_count">成交筆數</string>
     <string name="deal_abc">成交股數</string>
     <string name="deal_money">成交金額</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
