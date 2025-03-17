@@ -34,7 +34,7 @@ object MyDiModule {
     fun provideRetrofit(gson: Gson) : Retrofit {
         val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
-                Log.d("TimApp",message)
+                //Log.d("TimApp",message)
             }
         })
 
@@ -42,7 +42,7 @@ object MyDiModule {
         val okHttpClient = OkHttpClient().newBuilder().addInterceptor(logging).build()
 
         return Retrofit.Builder()
-            .baseUrl("https://openapi.twse.com.tw/")
+            .baseUrl("https://openapi.twse.com.tw/v1/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()

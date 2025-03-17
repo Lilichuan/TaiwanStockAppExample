@@ -21,18 +21,18 @@ import com.example.examplestockapp.R
 
 @Composable
 fun StockCardA(
-    code: String,
-    name: String,
-    openingPrice: String,
-    closingPrice: String,
-    highestPrice: String,
-    lowestPrice: String,
-    change: String,
-    monthlyAveragePrice: String,
-    transaction: String,
-    tradeVolume: String,
-    tradeValue: String,
-    onclickEvent: () -> Unit
+    code: String?,
+    name: String?,
+    openingPrice: String?,
+    closingPrice: String?,
+    highestPrice: String?,
+    lowestPrice: String?,
+    change: String?,
+    monthlyAveragePrice: String?,
+    transaction: String?,
+    tradeVolume: String?,
+    tradeValue: String?,
+    onclickEvent: () -> Unit = {}
 ) {
 
     Card(
@@ -41,13 +41,18 @@ fun StockCardA(
         },
         shape = RoundedCornerShape(8.dp)
     ) {
+
+        fun fixText(text : String?) : String{
+            return text ?: ""
+        }
+
         Column {
 
             Text(modifier = Modifier.padding(5.dp)
-                ,text = code)
+                ,text = fixText(code))
 
             Text(modifier = Modifier.padding(5.dp),
-                text = name,
+                text = fixText(name),
                 fontSize = 16.sp)
 
             val rowModifier = Modifier
@@ -59,38 +64,40 @@ fun StockCardA(
             Row(modifier = rowModifier)
             {
                 SmallTitle(smallModifier, title = R.string.start_price)
-                ValueText(smallModifier, valueText = openingPrice)
+                ValueText(smallModifier, valueText = fixText(openingPrice))
                 SmallTitle(smallModifier, title = R.string.end_price)
-                ValueText(smallModifier, valueText = closingPrice)
+                ValueText(smallModifier, valueText = fixText(closingPrice))
             }
 
             Row(modifier = rowModifier) {
                 SmallTitle(smallModifier, title = R.string.height_price)
-                ValueText(smallModifier, valueText = highestPrice)
+                ValueText(smallModifier, valueText = fixText(highestPrice))
                 SmallTitle(smallModifier, title = R.string.low_price)
-                ValueText(smallModifier, valueText = lowestPrice)
+                ValueText(smallModifier, valueText = fixText(lowestPrice))
             }
 
             Row(modifier = rowModifier) {
                 SmallTitle(smallModifier, title = R.string.textA)
-                ValueText(smallModifier, valueText = change)
+                ValueText(smallModifier, valueText = fixText(change))
                 SmallTitle(smallModifier, title = R.string.average_month_price)
-                ValueText(smallModifier, valueText = monthlyAveragePrice)
+                ValueText(smallModifier, valueText = fixText(monthlyAveragePrice))
             }
 
             Row(modifier = rowModifier) {
                 SmallTitle(smallModifier, title = R.string.deal_count)
-                ValueText(smallModifier, valueText = transaction)
+                ValueText(smallModifier, valueText = fixText(transaction))
                 SmallTitle(smallModifier, title = R.string.deal_abc)
-                ValueText(smallModifier, valueText = tradeVolume)
+                ValueText(smallModifier, valueText = fixText(tradeVolume))
                 SmallTitle(smallModifier, title = R.string.deal_money)
-                ValueText(smallModifier, valueText = tradeValue)
+                ValueText(smallModifier, valueText = fixText(tradeValue))
             }
         }
     }
 
 
 }
+
+
 
 @Composable
 fun SmallTitle(
@@ -136,3 +143,4 @@ private fun PreviewStockCardA() {
         {}
     )
 }
+

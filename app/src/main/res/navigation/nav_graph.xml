@@ -8,6 +8,5 @@
     <fragment
         android:id="@+id/mainListFragment"
         android:name="com.example.examplestockapp.ui.MainListFragment"
-        android:label="fragment_main_list"
-        tools:layout="@layout/fragment_main_list" />
+        android:label="fragment_main_list"/>
 </navigation>
