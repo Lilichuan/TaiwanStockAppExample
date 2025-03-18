@@ -4,22 +4,17 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 
 
 @Composable
 fun StockDetailDialog(
     name: String,
-    peRatio: String,
-    pbRatio: String,
-    dividendYield: String,
-    onDismissRequest: () -> Unit,
+    peRatio: String?,
+    pbRatio: String?,
+    dividendYield: String?,
+    onDismissRequest: () -> Unit = {},
 ) {
-    val openDialog = remember { mutableStateOf(false) }
-    if (!openDialog.value) {
-        return
-    }
+
     val infoString = createInfo(peRatio, pbRatio, dividendYield)
     AlertDialog(
         title = {
@@ -29,7 +24,6 @@ fun StockDetailDialog(
             Text(text = infoString)
         },
         onDismissRequest = {
-            openDialog.value = false
             onDismissRequest()
         },
         confirmButton = {
@@ -45,10 +39,10 @@ fun StockDetailDialog(
 }
 
 private fun createInfo(
-    peRatio: String,
-    pbRatio: String,
-    dividendYield: String,
+    peRatio: String?,
+    pbRatio: String?,
+    dividendYield: String?,
 ): String {
-    val dividendYieldPercent = dividendYield.toFloat() * 100f
+    val dividendYieldPercent = if (dividendYield == null) 0.0 else dividendYield.toFloat() * 100f
     return "本益比:$${peRatio}、殖利率${dividendYieldPercent}%)、股價淨值比:${pbRatio}"
 }

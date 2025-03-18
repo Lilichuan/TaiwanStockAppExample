@@ -1,5 +1,6 @@
 package com.example.examplestockapp.di
 
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import com.example.examplestockapp.network.beans.BwibbuItem
 import com.example.examplestockapp.network.beans.StockAvgItem
@@ -29,43 +30,33 @@ class MyDataRepository @Inject constructor() {
     }
 
 
+    fun findStockDayAvgData(code : String? , list : List<StockAvgItem>) : StockAvgItem?{
+        if(TextUtils.isEmpty(code)){
+            return null
+        }
 
-    fun findBwibbuItem(number: String): BwibbuItem? {
-        bwiListData.value?.let {
-            for (item in it) {
-                if (number.contentEquals(item.name)) {
-                    return item
-                }
+        list.forEach{
+            if(code.contentEquals(it.code)){
+                return it
             }
         }
 
         return null
     }
 
-    fun findStockAvgItemItem(number: String): StockAvgItem? {
-        stockAvgListData.value?.let {
-            for (item in it) {
-                if (number.contentEquals(item.name)) {
-                    return item
-                }
+
+    fun findStockDayAllData(code : String? , list : List<StockDayItem>) : StockDayItem?{
+        if(TextUtils.isEmpty(code)){
+            return null
+        }
+
+        list.forEach{
+            if(code.contentEquals(it.code)){
+                return it
             }
         }
 
         return null
-    }
-
-    fun mapToCardItems(originalList : List<StockDayItem>) : List<CardItem>{
-        val cardList = mutableListOf<CardItem>()
-
-        for (stockDayItem in originalList){
-            val cardItem = createCardItem(stockDayItem)
-            findStockAvgItemItem(stockDayItem.code)?.let {
-                cardItem.monthlyAveragePrice = it.monthlyAverage
-            }
-
-            cardList.add(cardItem)
-        }
-        return cardList
     }
 
 

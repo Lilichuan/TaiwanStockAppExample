@@ -41,25 +41,50 @@ class MyViewModel @Inject constructor(
                     emit(stockApi.stockDayAll().execute())
                 }
 
-                combine(flow1, flow2, flow3){ data1, data2, data3 ->
-                    data2.body()?.let {
-                        myDataRepository.updateAvgList(it)
+                combine(flow1, flow2, flow3){ bwibbuData, stockDayAvgData, stockDayAll ->
+
+                    val cardItemList = mutableListOf<CardItem>()
+
+                    bwibbuData.body()?.forEach{ itemA ->
+                        val cardItem = CardItem()
+                        cardItem.code = itemA.code
+                        cardItem.name = itemA.name
+                        cardItem.peRatio = itemA.peRatio
+                        cardItem.pbRatio = itemA.pbRatio
+                        cardItem.dividendYield = itemA.dividendYield
+
+                        stockDayAvgData.body()?.let { listB ->
+                            myDataRepository.findStockDayAvgData(cardItem.code, listB)?.let {
+                                cardItem.monthlyAveragePrice = it.monthlyAverage
+                                cardItem.closingPrice = it.closingPrice
+                            }
+                        }
+
+                        stockDayAll.body()?.let { listC ->
+                            myDataRepository.findStockDayAllData(cardItem.code, listC)?.let {
+                                cardItem.openingPrice = it.openingPrice
+                                cardItem.closingPrice = it.closingPrice
+                                cardItem.tradeValue = it.tradeValue
+                                cardItem.tradeVolume = it.tradeVolume
+                                cardItem.highestPrice = it.highestPrice
+                                cardItem.lowestPrice = it.lowestPrice
+                                cardItem.change = it.change
+                                cardItem.transaction = it.transaction
+                            }
+                        }
+                        cardItemList.add(cardItem)
                     }
 
-                    data3.body()?.let {
-                        networkStatus.postValue(NetworkStatus.ConnectSuccess)
-                        val cardList = myDataRepository.mapToCardItems(it)
-                        myDataRepository.cardListLiveData.postValue(cardList)
-                    }
-
-                    networkStatus.postValue(NetworkStatus.ConnectFailed)
+                    return@combine cardItemList
                 }
                     .flowOn(Dispatchers.IO)
                     .catch {
+                        networkStatus.postValue(NetworkStatus.ConnectFailed)
                         it.printStackTrace()
                     }
                     .collect{
-
+                        networkStatus.postValue(NetworkStatus.ConnectSuccess)
+                        myDataRepository.cardListLiveData.postValue(it)
                     }
 
             }

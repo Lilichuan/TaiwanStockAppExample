@@ -12,4 +12,8 @@ class CardItem (
     var transaction: String? = null,
     var tradeVolume: String? = null,
     var tradeValue: String? = null,
+
+    var peRatio: String? = null,
+    var dividendYield: String? = null,
+    var pbRatio: String? = null,
 )

@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -18,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.examplestockapp.R
 import com.example.examplestockapp.ui.composeui.StockCardA
+import com.example.examplestockapp.ui.composeui.StockDetailDialog
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -29,6 +33,10 @@ class MainListFragment : Fragment(
         savedInstanceState: Bundle?
     ): View? {
         val viewModel: MyViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+
+        viewModel.networkStatus.observe(viewLifecycleOwner) { status ->
+            Toast.makeText(requireContext(), status.textId, Toast.LENGTH_SHORT).show()
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -49,7 +57,8 @@ class MainListFragment : Fragment(
             .collectAsStateWithLifecycle(initValue)
         LazyColumn {
             items(list.size) { index ->
-                OneCard(list[index])
+                val item = list[index]
+                OneCard(item)
             }
         }
     }
@@ -57,9 +66,10 @@ class MainListFragment : Fragment(
 
     @Composable
     private fun OneCard(
-        item: CardItem,
-        onClick: () -> Unit = {}
+        item: CardItem
     ) {
+        val showDialog = remember { mutableStateOf(false) }
+
         StockCardA(
             code = item.code,
             name = item.name,
@@ -71,8 +81,19 @@ class MainListFragment : Fragment(
             monthlyAveragePrice = item.monthlyAveragePrice,
             transaction = item.transaction,
             tradeValue = item.tradeValue,
-            tradeVolume = item.tradeVolume
+            tradeVolume = item.tradeVolume,
+            onclickEvent = { showDialog.value = true }
         )
+
+        if (showDialog.value) {
+            StockDetailDialog(
+                name = item.name!!,
+                peRatio = item.peRatio,
+                pbRatio = item.pbRatio,
+                dividendYield = item.dividendYield,
+                onDismissRequest = { showDialog.value = false }
+            )
+        }
     }
 
 }
