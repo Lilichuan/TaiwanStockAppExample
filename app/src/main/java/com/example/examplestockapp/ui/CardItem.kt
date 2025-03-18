@@ -2,6 +2,7 @@ package com.example.examplestockapp.ui
 
 class CardItem (
     var code: String? = null,
+    var codeInt: Int = 0,
     var name: String? = null,
     var openingPrice: String? = null,
     var closingPrice:String? = null,

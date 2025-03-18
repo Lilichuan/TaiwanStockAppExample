@@ -3,6 +3,7 @@ package com.example.examplestockapp.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.examplestockapp.data.SortType
 import com.example.examplestockapp.di.MyDataRepository
 import com.example.examplestockapp.network.NetworkStatus
 import com.example.examplestockapp.network.StockApi
@@ -21,6 +22,20 @@ class MyViewModel @Inject constructor(
     val myDataRepository: MyDataRepository,
     private val stockApi: StockApi,
 ) : ViewModel()  {
+
+    init {
+        myDataRepository.sortType.observeForever{
+            when (it) {
+                SortType.SmallToBig -> {
+                    myDataRepository.smallToBig()
+                }
+
+                else -> {
+                    myDataRepository.bigToSmall()
+                }
+            }
+        }
+    }
 
     val networkStatus = MutableLiveData(NetworkStatus.Offline)
 
@@ -48,6 +63,7 @@ class MyViewModel @Inject constructor(
                     bwibbuData.body()?.forEach{ itemA ->
                         val cardItem = CardItem()
                         cardItem.code = itemA.code
+                        cardItem.codeInt = itemA.code.toInt()
                         cardItem.name = itemA.name
                         cardItem.peRatio = itemA.peRatio
                         cardItem.pbRatio = itemA.pbRatio
@@ -75,6 +91,16 @@ class MyViewModel @Inject constructor(
                         cardItemList.add(cardItem)
                     }
 
+                    when (myDataRepository.sortType.value) {
+                        SortType.SmallToBig -> {
+                            cardItemList.sortWith(myDataRepository.smallToBigComparator)
+                        }
+
+                        else -> {
+                            cardItemList.sortWith(myDataRepository.bigToSmallComparator)
+                        }
+                    }
+
                     return@combine cardItemList
                 }
                     .flowOn(Dispatchers.IO)
@@ -90,5 +116,9 @@ class MyViewModel @Inject constructor(
             }
 
         }
+    }
+
+    fun changeOrderType(sortType: SortType) {
+        myDataRepository.sortType.postValue(sortType)
     }
 }

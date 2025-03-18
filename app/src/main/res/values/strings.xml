@@ -9,11 +9,17 @@
     <string name="deal_count">成交筆數</string>
     <string name="deal_abc">成交股數</string>
     <string name="deal_money">成交金額</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="offline">離線</string>
     <string name="connecting">連線中</string>
     <string name="connecting_success">連線中</string>
     <string name="connect_failed">連線失敗</string>
+    <string name="sort_big_to_small">依股票代號降序</string>
+    <string name="sort_small_to_big">依股票代號升序</string>
+
+    <string name="fragment_title">股票列表</string>
+    <string name="menu_more">更多</string>
+
+    <string name="small_to_big">編號由小到大</string>
+    <string name="big_to_small">編號由大到小</string>
 </resources>
