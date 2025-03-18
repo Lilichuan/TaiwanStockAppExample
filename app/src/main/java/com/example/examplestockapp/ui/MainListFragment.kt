@@ -7,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Lifecycle
@@ -60,6 +64,7 @@ class MainListFragment : Fragment(
                 val item = list[index]
                 OneCard(item)
             }
+
         }
     }
 
@@ -84,6 +89,7 @@ class MainListFragment : Fragment(
             tradeVolume = item.tradeVolume,
             onclickEvent = { showDialog.value = true }
         )
+        HorizontalDivider(color = Color.LightGray, thickness = 1.dp)
 
         if (showDialog.value) {
             StockDetailDialog(
